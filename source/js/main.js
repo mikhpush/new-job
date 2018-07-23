@@ -2,7 +2,7 @@ const CONSTS = {
 	scale: 10,
 	lineWidth: 3,
 	colorTone: 0xff0000,
-	maxAbountOfCubes: 20
+	maxAmountOfCubes: 10
 }
 
 let cubes = [];
@@ -21,10 +21,10 @@ const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
 const drawCubes = () => {
-	const abountOfCubes = Math.floor(Math.random()*CONSTS.maxAbountOfCubes)
-	for (let i = 0; i <= abountOfCubes; i++) {
-		window[`cube${i}`] = new Cubic(scene);
-		window[`cube${i}`].bind(window[`cube${i}`]);
+	const amountOfCubes = Math.floor(Math.random()*CONSTS.maxAmountOfCubes)
+	for (let i = 0; i <= amountOfCubes; i++) {
+	window[`cube${i}`] = new Cubic(scene);
+	window[`cube${i}`].bind(window[`cube${i}`]);
 	}
 }
 
@@ -32,7 +32,6 @@ const render = () => {
 	requestAnimationFrame( render );
 	renderer.render( scene, camera );
 }
-
 
 class Cubic {
 	constructor(scene) {
@@ -72,7 +71,7 @@ class Cubic {
 		const cubeVertices = this.geometry.vertices;
 		let spheres = [];
 
-		for (let i = 2 ; i < cubeVertices.length ; i++){
+		for (let i = 0 ; i < cubeVertices.length ; i++){
       const sphereGeometry = new THREE.SphereGeometry(0.5,10,10);
       const sphereMaterial = new THREE.MeshBasicMaterial({color: (CONSTS.colorTone*Math.random()) });
       spheres[i] = new THREE.Mesh(sphereGeometry,sphereMaterial);
@@ -111,16 +110,12 @@ class Cubic {
 
 		const intersects = raycaster.intersectObjects(cubeOnScene.cube.children);
 
-		console.log(intersects)
-
 		for (const sphere of intersects) {
 			if (sphere.object.geometry.type === "SphereGeometry") {
 				const currentObject = sphere.object;
 				const currentColor = currentObject.material.color.getHex();
-				console.log(currentColor)
 				const myPos = currentObject.position;
 				this.paintEdges(myPos, currentColor, cubeOnScene);
-				break;
 			}
 		}
 	}
@@ -132,5 +127,7 @@ class Cubic {
 	}
 }
 
+
 drawCubes();
+
 render();
